@@ -17,7 +17,9 @@ class AccountProvider extends ChangeNotifier {
     required this.following
   });
 
-  factory AccountProvider.fromNew({required username}): accountStart = DateTime.now(), posts = [], followers = [], following = [];
+  factory AccountProvider.fromNew({required username}) {
+    return AccountProvider(username: username, accountStart: DateTime.now(), posts: [], followers: [], following: []);
+  }
 
   List<DreamPost> get myPosts => List.from(posts);
 
