@@ -11,7 +11,7 @@ response = ''
 # this is our method to take in a prompt from the Flutter user that they input as a description of their dream
 # and output an image url that is a visual representation of the dream using OpenAI's DALL-E-2 image generator
 # returns an image url that the Flutter side can use to download and show the image to the user
-def promptRoute():
+def handle_prompt_image():
     global response
     if (request.method == 'POST'):
         client = OpenAI()
