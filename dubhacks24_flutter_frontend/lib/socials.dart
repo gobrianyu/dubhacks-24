@@ -14,6 +14,7 @@ class SocialsState extends State<Socials> {
 
   @override
   void initState() {
+    super.initState();
     initFeed();
   }
 
@@ -23,7 +24,7 @@ class SocialsState extends State<Socials> {
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 50),
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -36,16 +37,12 @@ class SocialsState extends State<Socials> {
   }
 
   Widget _postList() {
-    List<Widget> feedList = [];
-    for (DreamPost post in feed) {
-      feedList.add(_post(post));
-    } 
-    return Container(
-      height: MediaQuery.of(context).size.height - 142,
-      child: ListView(
-        primary: true,
-        shrinkWrap: true,
-        children: feedList,
+    return Expanded(
+      child: ListView.builder(
+        itemCount: feed.length,
+        itemBuilder: (context, index) {
+          return _post(feed[index]);
+        },
       ),
     );
   }
