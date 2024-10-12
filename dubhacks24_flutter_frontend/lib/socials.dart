@@ -1,5 +1,4 @@
-import 'dart:ffi';
-
+import 'package:dubhacks24_flutter_frontend/post.dart';
 import 'package:flutter/material.dart';
 
 class Socials extends StatefulWidget {
@@ -10,16 +9,18 @@ class Socials extends StatefulWidget {
 }
 
 class SocialsState extends State<Socials> {
+  final List<DreamPost> feed = [];
   final TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
-    
+    initFeed();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50, bottom: 50),
@@ -27,7 +28,7 @@ class SocialsState extends State<Socials> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _filterBar(),
-            _post()
+            _postList()
           ],
         ),
       )
@@ -35,13 +36,23 @@ class SocialsState extends State<Socials> {
   }
 
   Widget _postList() {
-    return ListView(
-      children: []
+    List<Widget> feedList = [];
+    for (DreamPost post in feed) {
+      feedList.add(_post(post));
+    } 
+    return Container(
+      height: MediaQuery.of(context).size.height - 142,
+      child: ListView(
+        primary: true,
+        shrinkWrap: true,
+        children: feedList,
+      ),
     );
   }
 
-  Widget _post() {
+  Widget _post(DreamPost post) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
@@ -54,9 +65,9 @@ class SocialsState extends State<Socials> {
                 shape: BoxShape.circle
               ),
             ),
-            Text('username'),
+            Text(post.username),
             Spacer(),
-            Text('time')
+            Text(getDate(post.time))
           ],
         ),
         AspectRatio(
@@ -67,7 +78,12 @@ class SocialsState extends State<Socials> {
               border: Border.all()
             )
           ),
-        )
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 5, bottom: 5),
+          child: Text('Some really long test caption.'),
+        ),
+        SizedBox(height: 30)
       ],
     );
   }
@@ -118,4 +134,41 @@ class SocialsState extends State<Socials> {
       )
     );
   }
+
+  // temp? tester function to hardcode posts in user's feed
+  void initFeed() {
+    final post1 = DreamPost(username: 'nano.d3m', time: DateTime.now(), profilePic: 'unknown', caption: '@dubhacks for 2024. 10th year anni!');
+    final post2 = DreamPost(username: 'rando', time: DateTime.now(), profilePic: 'profilePic', caption: 'RAHHHH');
+    feed.add(post1);
+    feed.add(post2);
+  }
+}
+
+String monthAsAbbrevString(int month) {
+  switch (month) {
+    case 1: return 'Jan';
+    case 2: return 'Feb';
+    case 3: return 'Mar';
+    case 4: return 'Apr';
+    case 5: return 'May';
+    case 6: return 'June';
+    case 7: return 'July';
+    case 8: return 'Aug';
+    case 9: return 'Sep';
+    case 10: return 'Oct';
+    case 11: return 'Nov';
+    case 12: return 'Dec';
+    default: return '???';
+  }
+}
+
+String getDate(DateTime time) {
+  final DateTime now = DateTime.now();
+  if (time.year == now.year) {
+    if (time.month == now.month && time.day == now.day) {
+      return '${time.hour}:${time.minute}';
+    }
+    return '${monthAsAbbrevString(time.month)} ${time.day}';
+  }
+  return '${monthAsAbbrevString(time.month)} ${time.day}, ${time.year}';
 }
