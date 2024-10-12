@@ -22,14 +22,14 @@ client = OpenAI(api_key=YOUR_API_KEY, base_url="https://api.perplexity.ai")
 
 # chat completion without streaming
 response = client.chat.completions.create(
-    model="llama-3-sonar-large-32k-online",
+    model="llama-3.1-sonar-small-128k-chat",
     messages=messages,
 )
 print(response)
 
 # chat completion with streaming
 response_stream = client.chat.completions.create(
-    model="llama-3-sonar-large-32k-online",
+    model="llama-3.1-sonar-small-128k-chat",
     messages=messages,
     stream=True,
 )
