@@ -1,3 +1,5 @@
+import 'package:dubhacks24_flutter_frontend/account_provider.dart';
+import 'package:dubhacks24_flutter_frontend/diary.dart';
 import 'package:dubhacks24_flutter_frontend/socials.dart';
 import 'package:dubhacks24_flutter_frontend/user.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +61,7 @@ class _MainAppState extends State<MainApp> {
     switch (_selectedIndex) {
       case 2: return UserPage();
       case 1: return Socials();
+      case 0: return Diary(account: AccountProvider.fromNew(username: 'username'));
       default: return Placeholder();
     }
   }
