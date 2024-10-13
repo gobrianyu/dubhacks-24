@@ -27,8 +27,9 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AccountProvider>(
-      builder: (context, accountProvider, _) {
+    return ChangeNotifierProvider(
+      create: (_) => AccountProvider(username: 'Username', accountStart: DateTime.now(), posts: [], followers: [], following: []),
+      builder: (context, _) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           home: Scaffold(

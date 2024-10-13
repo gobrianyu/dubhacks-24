@@ -1,4 +1,6 @@
+import 'package:dubhacks24_flutter_frontend/account_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -10,18 +12,22 @@ class UserPage extends StatefulWidget {
 class UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 26, 2, 37),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _profileInfo(),
-            _photoGrid(),
-          ],
-        ),
-      ),
+    return Consumer<AccountProvider>(
+      builder: (context, accountProvider, _) {
+        return Scaffold(
+          backgroundColor: const Color.fromARGB(255, 26, 2, 37),
+          body: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _profileInfo(),
+                _photoGrid(),
+              ],
+            ),
+          ),
+        );
+      }
     );
   }
 
@@ -105,10 +111,19 @@ class UserPageState extends State<UserPage> {
                     ],
                   ),
                   SizedBox(width: 30),
-                  Text(
-                    'Following: 500',
-                    style: TextStyle(
-                        fontSize: 14, color: Color.fromARGB(255, 234, 169, 105)),
+                  Column(
+                    children: [
+                      Text(
+                        'Following',
+                        style: TextStyle(
+                            fontSize: 14, color: Color.fromARGB(255, 234, 169, 105)),
+                      ),
+                      Text(
+                        '${100}',
+                        style: TextStyle(
+                            fontSize: 14, color: Color.fromARGB(255, 234, 169, 105)),
+                      ),
+                    ],
                   ),
                 ],
               ),
