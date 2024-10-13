@@ -77,7 +77,7 @@ class DiaryState extends State<Diary> {
                           right: 0,
                           bottom: 75,
                           child: CircularCountDownTimer(
-                            duration: 10, // 10 seconds countdown
+                            duration: 1800, // 30 minute countdown
                             initialDuration: 0,
                             controller: _countdownController,
                             width: 80, // Adjust width
