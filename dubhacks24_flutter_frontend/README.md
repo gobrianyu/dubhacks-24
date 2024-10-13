@@ -3,7 +3,7 @@
 todos for sunday:
 - powerpoint presentation ; HIGH PRIORITY / UI screenshots will be temporarily placed under assets/images/demo_screenshots
     - presentation setup (i.e. video?, features to demo, etc)
-- hard-coding posts for homepage ; HIGH PRIORITY
+- hard-coding posts for homepage ; HIGH PRIORITY (done)
 - hive secure storage ; low priority
 - search bar ; medium priority
 - extra features ; low priority
