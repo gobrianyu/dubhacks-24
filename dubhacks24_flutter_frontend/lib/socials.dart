@@ -11,6 +11,9 @@ class Socials extends StatefulWidget {
 class SocialsState extends State<Socials> {
   final List<DreamPost> feed = [];
   final TextEditingController searchController = TextEditingController();
+  final Color backColour = Color.fromARGB(255, 26, 2, 37);
+  final Color accentColour = Color.fromARGB(255, 149, 49, 109);
+  final Color textColour = Colors.white;
 
   @override
   void initState() {
@@ -20,19 +23,36 @@ class SocialsState extends State<Socials> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Color.fromARGB(255, 26, 2, 37),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _filterBar(),
-            _postList()
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomCenter,
+          colors: [
+            accentColour,
+            backColour
           ],
+        )
+      ),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.transparent,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          flexibleSpace: _filterBar(),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
-      )
+        body: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _postList()
+            ],
+          ),
+        )
+      ),
     );
   }
 
@@ -58,13 +78,13 @@ class SocialsState extends State<Socials> {
               height: 50,
               width: 50,
               decoration: BoxDecoration(
-                border: Border.all(color: const Color.fromARGB(255, 112, 230, 179),),
+                border: Border.all(color: textColour, width: 1.5),
                 shape: BoxShape.circle
               ),
             ),
-            Text(post.username, style: TextStyle(color: Color.fromARGB(255, 141, 150, 252)),),
+            Text(post.username, style: TextStyle(color: textColour, fontWeight: FontWeight.w600, fontSize: 17)),
             Spacer(),
-            Text(getDate(post.time), style: TextStyle(color: Color.fromARGB(255, 234, 169, 105)),)
+            Text(getDate(post.time), style: TextStyle(color: textColour, fontSize: 15))
           ],
         ),
         AspectRatio(
@@ -78,7 +98,7 @@ class SocialsState extends State<Socials> {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 5, bottom: 5),
-          child: Text('Some really long test caption.', style: TextStyle(color: Color.fromARGB(255, 141, 150, 252)),),
+          child: Text('Some really long test caption.', style: TextStyle(color: textColour)),
         ),
         SizedBox(height: 30)
       ],
@@ -87,14 +107,14 @@ class SocialsState extends State<Socials> {
 
   Widget _filterBar() {
     return Container(
-      margin: const EdgeInsets.only(top: 5, bottom: 5),
+      margin: const EdgeInsets.only(top: 40, left: 15, right: 15),
       padding: const EdgeInsets.only(left: 2),
       width: MediaQuery.of(context).size.width,
       height: 32,
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 225, 225),
-        border: Border.all(width: 0.8),
-        borderRadius: const BorderRadius.all(Radius.circular(16))
+        border: Border.all(width: 1, color: textColour),
+        borderRadius: const BorderRadius.all(Radius.circular(16)),
+        color: Color.fromARGB(50, 255, 255, 255)
       ),
       child: Row(
         children: [
@@ -102,28 +122,28 @@ class SocialsState extends State<Socials> {
             width: MediaQuery.of(context).size.width - 44, // WARNING: NON GLOBAL CONSTANT
             child: TextField(  
               controller: searchController,
-              cursorColor: Colors.black,
+              cursorColor: textColour,
               cursorWidth: 1,
               style: const TextStyle(
                 fontSize: 14,
               ),
               decoration: InputDecoration(
                 hintText: 'Search...',
-                hintStyle: const TextStyle(
+                hintStyle: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.normal,
-                  color: Color.fromARGB(255, 26, 2, 37),
+                  color: textColour,
                 ),
                 border: const OutlineInputBorder(
                   borderSide: BorderSide.none,
                 ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-                prefixIcon: const Icon(Icons.search, size: 20),
+                prefixIcon: Icon(Icons.search, size: 20, color: textColour),
                 suffixIcon: InkWell(
                   onTap: () {
                     setState(() => searchController.clear());
                   },
-                  child: const Icon(Icons.clear, size: 18)
+                  child: Icon(Icons.clear, size: 18, color: textColour)
                 )
               ),
             ),
@@ -160,11 +180,18 @@ String monthAsAbbrevString(int month) {
   }
 }
 
+String getMinute(int time) {
+  if (time < 10) {
+    return '0$time';
+  }
+  return time.toString();
+}
+
 String getDate(DateTime time) {
   final DateTime now = DateTime.now();
   if (time.year == now.year) {
     if (time.month == now.month && time.day == now.day) {
-      return '${time.hour}:${time.minute}';
+      return '${time.hour}:${getMinute(time.minute)}';
     }
     return '${monthAsAbbrevString(time.month)} ${time.day}';
   }

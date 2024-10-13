@@ -39,24 +39,7 @@ class _DiaryEntryState extends State<DiaryEntry>{
 
         // Editable title text field.
         appBar: AppBar(
-          title: TextFormField(
-            initialValue: currentName,
-            style: TextStyle(fontWeight: FontWeight.bold, color: textColour, fontSize: 20),
-            decoration: InputDecoration(
-              hintText: 'Title', 
-              hintStyle: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: secondaryTextColour,
-                fontSize: 20
-              ),
-              labelStyle: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: textColour,
-                fontSize: 20
-              ),
-            ),
-            onChanged: (name) => {currentName = name},
-          ),
+          title: Text(getDate(DateTime.now()))
         ),
 
         // Main editable text field body.
@@ -92,8 +75,9 @@ class _DiaryEntryState extends State<DiaryEntry>{
 
   Future<void> generateImage(String prompt) async {
     print('debug: waiting');
-    final String apiKey = const String.fromEnvironment('OPEN_API_KEY');
-    final String apiUrl = 'https://api.openai.com/v1/images/generations';
+    const String apiKey = String.fromEnvironment('OPENAI_API_KEY');
+    print(apiKey);
+    const String apiUrl = 'https://api.openai.com/v1/images/generations';
 
     final response = await http.post(
       Uri.parse(apiUrl),
@@ -103,7 +87,7 @@ class _DiaryEntryState extends State<DiaryEntry>{
       },
       body: jsonEncode({
         'model': "dall-e-3",
-        'prompt': prompt,
+        'prompt': "Create an image in a photo-realistic format from the perspective of someone dreaming this dream:$prompt. Make sure to be as loyal to the source dream as possible.",
         'n': 1, // Number of images to generate
         'size': '1024x1024', // Image size
       }),
@@ -119,4 +103,26 @@ class _DiaryEntryState extends State<DiaryEntry>{
       print('Error: ${response.statusCode} ${response.body}');
     }
   }
+}
+
+String monthAsAbbrevString(int month) {
+  switch (month) {
+    case 1: return 'Jan';
+    case 2: return 'Feb';
+    case 3: return 'Mar';
+    case 4: return 'Apr';
+    case 5: return 'May';
+    case 6: return 'June';
+    case 7: return 'July';
+    case 8: return 'Aug';
+    case 9: return 'Sep';
+    case 10: return 'Oct';
+    case 11: return 'Nov';
+    case 12: return 'Dec';
+    default: return '???';
+  }
+}
+
+String getDate(DateTime time) {
+  return '${monthAsAbbrevString(time.month)} ${time.day}, ${time.year}';
 }

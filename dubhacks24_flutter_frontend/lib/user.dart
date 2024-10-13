@@ -1,4 +1,5 @@
 import 'package:dubhacks24_flutter_frontend/account_provider.dart';
+import 'package:dubhacks24_flutter_frontend/post.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,20 +11,43 @@ class UserPage extends StatefulWidget {
 }
 
 class UserPageState extends State<UserPage> {
+  final Color backColour = Color.fromARGB(255, 26, 2, 37);
+  final Color accentColour = Color.fromARGB(255, 149, 49, 109);
+  final Color textColour = Colors.white;
+  late final AccountProvider accProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    accProvider = context.read<AccountProvider>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AccountProvider>(
       builder: (context, accountProvider, _) {
-        return Scaffold(
-          backgroundColor: const Color.fromARGB(255, 26, 2, 37),
-          body: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _profileInfo(),
-                _photoGrid(),
+        return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomCenter,
+              colors: [
+                accentColour,
+                backColour
               ],
+            )
+          ),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: ListView(
+                primary: true,
+                children: [
+                  _profileInfo(),
+                  _photoGrid(),
+                ],
+              ),
             ),
           ),
         );
@@ -32,45 +56,41 @@ class UserPageState extends State<UserPage> {
   }
 
   Widget _photoGrid() {
-    return Expanded(
-      child: GridView.count(
-        crossAxisCount: 3,
-        childAspectRatio: 1.0,
-        children: List.generate(21, (index) => _gridTile('assets/images/pic.jpg', index)),
+    return GridView.builder(
+      shrinkWrap: true,
+      primary: false,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,   // Number of tiles per row
+        childAspectRatio: 1.0, // Aspect ratio for each tile
       ),
+      itemCount: accProvider.posts.length, // Number of posts to display
+      itemBuilder: (context, index) {
+        final post = accProvider.posts[index];
+        return _gridTile(post, index);  // Use the post's image URL or any other property
+      },
     );
   }
 
-  Widget _gridTile(String imagePath, int index) {
+  Widget _gridTile(DreamPost post, int index) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => ImageViewer(
-              initialIndex: index,
-              imagePaths: List.generate(21, (index) => 'assets/images/pic.jpg'),
+              initialIndex: index, // Start at the tapped image
+              imagePaths: accProvider.posts.map((post) => post.imageLink).toList(), // Pass full list of image URLs
             ),
           ),
         );
       },
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: const Color.fromARGB(136, 230, 163, 255),
-            width: 0.3,
-          ),
-        ),
-        child: Center(
-          child: Image.asset(imagePath),
-        ),
-      ),
+      child: Image(image: AssetImage(post.imageLink), fit: BoxFit.cover),
     );
   }
 
   Widget _profileInfo() {
     return Padding(
-      padding: const EdgeInsets.only(top: 20.0),
+      padding: const EdgeInsets.only(top: 40, bottom: 25, left: 20, right: 20),
       child: Row(
         children: [
           Container(
@@ -78,21 +98,28 @@ class UserPageState extends State<UserPage> {
             width: 60,
             decoration: BoxDecoration(
               border: Border.all(
-                color: const Color.fromARGB(255, 112, 230, 179),
+                color: textColour,
+                width: 1.5,
               ),
-              shape: BoxShape.circle,
+              shape: BoxShape.circle, // Circular container
+            ),
+            child: ClipOval(
+              child: Image.asset(
+                accProvider.pfp, // Load the profile picture from assets
+                fit: BoxFit.cover, // Ensure the image covers the circle without distortion
+              ),
             ),
           ),
-          const SizedBox(width: 10),
-          const Column(
+          const SizedBox(width: 20),
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Username',
+                accProvider.username,
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 141, 150, 252)),
+                    color: textColour),
               ),
               Row(
                 children: [
@@ -101,12 +128,12 @@ class UserPageState extends State<UserPage> {
                       Text(
                         'Followers',
                         style: TextStyle(
-                            fontSize: 14, color: Color.fromARGB(255, 234, 169, 105)),
+                            fontSize: 14, color: textColour),
                       ),
                       Text(
-                        '${100}',
+                        '${accProvider.followers.length}',
                         style: TextStyle(
-                            fontSize: 14, color: Color.fromARGB(255, 234, 169, 105)),
+                            fontSize: 14, color: textColour),
                       ),
                     ],
                   ),
@@ -116,12 +143,12 @@ class UserPageState extends State<UserPage> {
                       Text(
                         'Following',
                         style: TextStyle(
-                            fontSize: 14, color: Color.fromARGB(255, 234, 169, 105)),
+                            fontSize: 14, color: textColour),
                       ),
                       Text(
-                        '${100}',
+                        '${accProvider.following.length}',
                         style: TextStyle(
-                            fontSize: 14, color: Color.fromARGB(255, 234, 169, 105)),
+                            fontSize: 14, color: textColour),
                       ),
                     ],
                   ),

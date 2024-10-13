@@ -3,6 +3,7 @@ import 'package:dubhacks24_flutter_frontend/account_provider.dart';
 import 'package:dubhacks24_flutter_frontend/diary_entry.dart';
 import 'package:dubhacks24_flutter_frontend/post.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Diary extends StatefulWidget {
@@ -14,12 +15,14 @@ class Diary extends StatefulWidget {
 }
 
 class DiaryState extends State<Diary> {
-  final List<DreamPost> feed = [];
   final CountDownController _countdownController = CountDownController();
   DateTime selectedDay = DateTime.now(); // Track the selected day
   CalendarFormat _calendarFormat = CalendarFormat.week;
   bool lockout = false;
-  final textColour = Colors.white;
+  final Color backColour = Color.fromARGB(255, 26, 2, 37);
+  final Color accentColour = Color.fromARGB(255, 149, 49, 109);
+  final Color textColour = Colors.white;
+  late final AccountProvider accProvider;
 
   @override
   void initState() {
@@ -27,91 +30,105 @@ class DiaryState extends State<Diary> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _countdownController.start();
     });
-
-    initFeed();
+    accProvider = context.read<AccountProvider>();
   }
 
   @override
   Widget build(BuildContext context) {
     final DateTime now = DateTime.now();
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Color.fromARGB(255, 26, 2, 37),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
-        child: Stack(
-          alignment: Alignment.bottomRight,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _calendar(),
-                const SizedBox(height: 20),
-                _postList(), // display posts matching the selected day
+    return Consumer<AccountProvider>(
+      builder: (context, accountProvider, _) {
+        return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomCenter,
+              colors: [
+                accentColour,
+                backColour
               ],
-            ),
-            selectedDay.day == now.day && selectedDay.month == now.month && selectedDay.year == now.year && !lockout
-            ? Stack(
-              alignment: Alignment.bottomRight,
+            )
+          ),
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: Colors.transparent,
+            body: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Stack(
+                alignment: Alignment.bottomRight,
                 children: [
-                  // Circular countdown timer behind the button
-                  Positioned(
-                    right: 0,
-                    bottom: 20,
-                    child: CircularCountDownTimer(
-                      duration: 10, // 10 seconds countdown
-                      initialDuration: 0,
-                      controller: _countdownController,
-                      width: 80, // Adjust width
-                      height: 80, // Adjust height
-                      ringColor: Colors.purpleAccent[100]!,
-                      fillColor: Colors.grey[300]!,
-                      backgroundColor: Colors.purple[500],
-                      strokeWidth: 10.0,
-                      textStyle: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                      textFormat: CountdownTextFormat.S,
-                      isReverse: true,
-                      isTimerTextShown: true,
-                      autoStart: false, // Starts in initState
-                      onComplete: () {
-                        debugPrint('Countdown Ended');
-                        setState(() => lockout = true);
-                      },
-                    ),
+                  ListView(
+                    children: [
+                      _calendar(),
+                      const SizedBox(height: 20),
+                      _postList(), // display posts matching the selected day
+                    ],
                   ),
-                  // GestureDetector with a button in front of the timer
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DiaryEntry()), // Assumed DiaryEntry is another page
-                      );
-                    },
-                    child: Row(
+                  selectedDay.day == now.day && selectedDay.month == now.month && selectedDay.year == now.year && !lockout
+                  ? Stack(
+                    alignment: Alignment.bottomRight,
                       children: [
-                        Spacer(),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          height: 80,
-                          width: 80,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle, color: Colors.blue),
-                          child: Icon(Icons.draw,
-                              color: Colors.white, size: 40),
+                        // Circular countdown timer behind the button
+                        Positioned(
+                          right: 0,
+                          bottom: 20,
+                          child: CircularCountDownTimer(
+                            duration: 10, // 10 seconds countdown
+                            initialDuration: 0,
+                            controller: _countdownController,
+                            width: 80, // Adjust width
+                            height: 80, // Adjust height
+                            ringColor: Colors.purpleAccent[100]!,
+                            fillColor: Colors.grey[300]!,
+                            backgroundColor: Colors.purple[500],
+                            strokeWidth: 10.0,
+                            textStyle: TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                            textFormat: CountdownTextFormat.S,
+                            isReverse: true,
+                            isTimerTextShown: true,
+                            autoStart: false, // Starts in initState
+                            onComplete: () {
+                              debugPrint('Countdown Ended');
+                              setState(() => lockout = true);
+                            },
+                          ),
+                        ),
+                        // GestureDetector with a button in front of the timer
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DiaryEntry()), // Assumed DiaryEntry is another page
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              Spacer(),
+                              Container(
+                                margin: EdgeInsets.only(bottom: 20),
+                                height: 80,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle, color: Colors.blue),
+                                child: Icon(Icons.draw,
+                                    color: Colors.white, size: 40),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ),
-                  ),
+                    )
+                  : Container()
                 ],
-              )
-            : Container()
-          ],
-        ),
-      ),
+              ),
+            ),
+          ),
+        );
+      }
     );
   }
 
@@ -137,7 +154,7 @@ class DiaryState extends State<Diary> {
         });
       },
       calendarStyle: CalendarStyle(
-        defaultTextStyle: TextStyle(color: Colors.white), // Default day text
+        defaultTextStyle: TextStyle(color: textColour), // Default day text
         weekendTextStyle: TextStyle(color: Colors.redAccent), // Weekend day text
         selectedDecoration: BoxDecoration(
           color: Colors.deepPurple, // Selected day background color
@@ -147,7 +164,7 @@ class DiaryState extends State<Diary> {
           color: Color.fromARGB(255, 176, 91, 170), // Current day background color
           shape: BoxShape.circle,
         ),
-        todayTextStyle: TextStyle(color: Colors.white), // Current day text color
+        todayTextStyle: TextStyle(color: textColour), // Current day text color
         outsideDaysVisible: false, // Hide days outside the selected month
       ),
       
@@ -171,7 +188,7 @@ class DiaryState extends State<Diary> {
 
   Widget _postList() {
     // filter posts for selected day
-    List<DreamPost> postsForSelectedDay = feed.where((post) {
+    List<DreamPost> postsForSelectedDay = accProvider.posts.where((post) {
       return post.time.year == selectedDay.year &&
              post.time.month == selectedDay.month &&
              post.time.day == selectedDay.day;
@@ -208,22 +225,14 @@ class DiaryState extends State<Diary> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(post.username, style: TextStyle(fontWeight: FontWeight.bold, color: textColour)),
-          Text('${post.time.hour}:${post.time.minute}', style: TextStyle(color: textColour)),
-          post.imageLink != '' ? Image.network(post.imageLink) : const SizedBox(),
+          Text('${post.time.hour}:${getMinute(post.time.minute)}', style: TextStyle(color: textColour)),
+          const Divider(),
+          post.imageLink != '' ? Image(image: AssetImage(post.imageLink)) : const SizedBox(),
           const SizedBox(height: 5),
           Text(post.caption, style: TextStyle(color: textColour)),
-          const Divider(),
         ],
       ),
     );
-  }
-
-  void initFeed() {
-    final post1 = DreamPost(username: 'nano.d3m', time: DateTime.now().subtract(const Duration(days: 1)), profilePic: 'unknown', caption: '@dubhacks for 2024. 10th year anni!', imageLink: '');
-    final post2 = DreamPost(username: 'rando', time: DateTime.now(), profilePic: 'profilePic', caption: 'RAHHHH', imageLink: '');
-    feed.add(post1);
-    feed.add(post2);
   }
 }
 
@@ -244,6 +253,13 @@ String monthAsAbbrevString(int month) {
     case 12: return 'Dec';
     default: return '???';
   }
+}
+
+String getMinute(int time) {
+  if (time < 10) {
+    return '0$time';
+  }
+  return time.toString();
 }
 
 String getDate(DateTime time) {

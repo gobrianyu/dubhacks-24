@@ -28,7 +28,7 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => AccountProvider(username: 'Username', accountStart: DateTime.now(), posts: [], followers: [], following: []),
+      create: (_) => AccountProvider.demo(),
       builder: (context, _) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
