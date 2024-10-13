@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dubhacks24_flutter_frontend/account_provider.dart';
 import 'package:dubhacks24_flutter_frontend/post.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +86,7 @@ class UserPageState extends State<UserPage> {
           ),
         );
       },
-      child: Image(image: AssetImage(post.imageLink), fit: BoxFit.cover),
+      child: post.imageLink.contains('/data/user') ? Image.file(File(post.imageLink)) : Image(image: AssetImage(post.imageLink), fit: BoxFit.cover),
     );
   }
 
@@ -200,27 +202,31 @@ class ImageViewer extends StatelessWidget {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Center(
-                child: Image.asset(post.imageLink),
+              Center( // logic of this format are exclusively for demo purposes.
+                child: post.imageLink.contains('/data/user') ? Image.file(File(post.imageLink)) : Image.asset(post.imageLink),
               ),
               const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      post.caption, // Display the post's caption
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                      softWrap: true,
-                      // overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      getDate(post.time), // Display the post's time
-                      style: TextStyle(color: Colors.grey, fontSize: 12),
-                    ),
-                  ],
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        post.caption, // Display the post's caption
+                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        softWrap: true,
+                        // overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        getDate(post.time), // Display the post's time
+                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

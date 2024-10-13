@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:dubhacks24_flutter_frontend/account_provider.dart';
 import 'package:dubhacks24_flutter_frontend/diary_entry.dart';
@@ -64,7 +66,9 @@ class DiaryState extends State<Diary> {
                       _postList(), // display posts matching the selected day
                     ],
                   ),
-                  selectedDay.day == now.day && selectedDay.month == now.month && selectedDay.year == now.year && !lockout
+                  selectedDay.day == now.day && selectedDay.month == now.month && selectedDay.year == now.year 
+                        && !lockout 
+                        && accProvider.posts.where((e) => e.time.day == now.day && e.time.month == now.month && e.time.year == now.year).toList().isEmpty
                   ? Stack(
                     alignment: Alignment.bottomRight,
                       children: [
@@ -220,6 +224,7 @@ class DiaryState extends State<Diary> {
   }
 
   Widget _post(DreamPost post) {
+    print(post.imageLink.contains('/data/user'));
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Container(
@@ -233,7 +238,7 @@ class DiaryState extends State<Diary> {
           children: [
             Text('${post.time.hour}:${getMinute(post.time.minute)}', style: TextStyle(color: textColour)),
             const Divider(),
-            post.imageLink != '' ? Image(image: AssetImage(post.imageLink)) : const SizedBox(),
+            post.imageLink != '' ? post.imageLink.contains('/data/user') ? Image.file(File(post.imageLink)) :Image(image: AssetImage(post.imageLink)) : const SizedBox(),
             const SizedBox(height: 5),
             Text(post.caption, style: TextStyle(color: textColour)),
           ],

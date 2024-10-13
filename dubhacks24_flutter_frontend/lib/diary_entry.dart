@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:dubhacks24_flutter_frontend/account_provider.dart';
 import 'package:dubhacks24_flutter_frontend/post.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 
@@ -24,12 +28,15 @@ class _DiaryEntryState extends State<DiaryEntry>{
   String currentText = ''; // Text field that we update.
   String imageUrl = '';
   String imageCaption = '';
-  final Color backColour = Color.fromARGB(255, 26, 2, 37);
-  final Color accentColour = Color.fromARGB(255, 149, 49, 109);
+  final Color backColour = const Color.fromARGB(255, 26, 2, 37);
+  final Color accentColour = const Color.fromARGB(255, 149, 49, 109);
   final Color textColour = Colors.white;
   bool loadLock = false;
   bool perplexLock = false;
   late final AccountProvider accProvider;
+
+  String imageData = '';
+  bool dataLoaded = false;
 
 
   // Initialises state to have currentText be original entry text,
@@ -40,6 +47,27 @@ class _DiaryEntryState extends State<DiaryEntry>{
     accProvider = context.read<AccountProvider>();
   }
 
+  // code copied from https://stackoverflow.com/questions/52299112/flutter-download-an-image-from-url
+  Future<void> _downloadImg(String urlString) async {
+    try {
+      var response = await get(Uri.parse(urlString)); // <--2
+      var documentDirectory = await getApplicationDocumentsDirectory();
+      var firstPath = "${documentDirectory.path}/images";
+      var filePathAndName = '${documentDirectory.path}/images/pic.jpg'; 
+      await Directory(firstPath).create(recursive: true);
+      File file2 = File(filePathAndName);
+      file2.writeAsBytesSync(response.bodyBytes);
+      setState(() {
+        imageData = filePathAndName;
+        dataLoaded = true;
+      });
+    } catch (e) {
+      setState(() => imageData = '');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error downloading image: $e')),
+      );
+    }
+  }
 
   // Building the view.
   @override
@@ -64,7 +92,7 @@ class _DiaryEntryState extends State<DiaryEntry>{
                   // Editable title text field.
                   appBar: AppBar(
                     leading: IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.white), // Custom back button icon
+                      icon: const Icon(Icons.arrow_back, color: Colors.white), // Custom back button icon
                       onPressed: () {
                         Navigator.pop(context); // Manually control the back navigation
                       },
@@ -113,7 +141,7 @@ class _DiaryEntryState extends State<DiaryEntry>{
                               }
                             },                
                             child: Container(
-                              padding: EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
+                              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
                               decoration: BoxDecoration(
                                 color: textColour,
                                 borderRadius: BorderRadius.circular(20)
@@ -123,30 +151,31 @@ class _DiaryEntryState extends State<DiaryEntry>{
                           ),
                           imageUrl.isNotEmpty ? GestureDetector(
                             onTap: () async {
-                              if (currentText.trim() != '') {
+                              await _downloadImg(imageUrl);
+                              if (currentText.trim() != '' && imageData != '') {
                                 accProvider.addPost(DreamPost(
                                   username: accProvider.username, 
-                                  imageLink: '', 
+                                  imageLink: imageData,
                                   time: DateTime.now(), 
                                   profilePic: accProvider.pfp, 
                                   caption: currentText)
                                 );
+                                Navigator.pop(context);
                               }
-                              Navigator.pop(context);
                             },                
                             child: Container(
-                              margin: EdgeInsets.only(left: 10),
-                              padding: EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
+                              margin: const EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
                               decoration: BoxDecoration(
                                 color: textColour,
                                 borderRadius: BorderRadius.circular(20)
                               ),
                               child: Text('Post!', style: TextStyle(fontWeight: FontWeight.bold, color: backColour))
                             ),
-                          ) : SizedBox(),
+                          ) : const SizedBox(),
                         ],
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       GestureDetector(
                         onTap: () async {
                           if (currentText.trim() != '') {
@@ -162,7 +191,7 @@ class _DiaryEntryState extends State<DiaryEntry>{
                           }
                         },                
                         child: Container(
-                          padding: EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
+                          padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
                           decoration: BoxDecoration(
                             color: textColour,
                             borderRadius: BorderRadius.circular(20)
@@ -170,7 +199,7 @@ class _DiaryEntryState extends State<DiaryEntry>{
                           child: Text(perplexLock ? 'Generating...' : 'Enhance Text with Perplexity', style: TextStyle(fontWeight: FontWeight.bold, color: backColour))
                         ),
                       ),
-                      SizedBox(height: 30)
+                      const SizedBox(height: 30)
                     ],
                   ),          
                 ),
@@ -178,7 +207,7 @@ class _DiaryEntryState extends State<DiaryEntry>{
             loadLock || perplexLock ? SizedBox.expand(
               child: Container(
                 color: const Color.fromARGB(100, 255, 255, 255),
-                child: Center(child: CircularProgressIndicator(
+                child: const Center(child: CircularProgressIndicator(
                   color: Colors.purple
                 ))
               ),
@@ -188,7 +217,8 @@ class _DiaryEntryState extends State<DiaryEntry>{
       }
     );
   }
-
+  
+  // Function enhances provided text prompt using perplexity's ai chat api
   Future<String?> _summarizePrompt(String prompt) async {
     const String apiKey = "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";
     const String baseUrl = "https://api.perplexity.ai";
@@ -234,6 +264,7 @@ class _DiaryEntryState extends State<DiaryEntry>{
     }
   }
 
+  // Function generates image using openai's dall-e 3 api
   Future<void> generateImage(String prompt) async {
     const String apiKey = String.fromEnvironment('OPENAI_API_KEY');
     const String apiUrl = 'https://api.openai.com/v1/images/generations';
@@ -269,38 +300,6 @@ class _DiaryEntryState extends State<DiaryEntry>{
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error generating image: $e')),
       );
-    }
-  }
-
-  Future<void> generateCaption(String prompt) async {
-    const String apiKey = String.fromEnvironment('OPENAI_API_KEY');
-    const String apiUrl = 'https://api.openai.com/v1/chat/completions';
-
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $apiKey',
-      },
-      body: jsonEncode({
-        'model': "gpt-4",
-        'messages': [
-          {'role': "system", 'content': "You are a helpful assistant."},
-          {
-            'role': "user",
-            'content': "Create a 1 sentence caption of this description of a dream: $prompt",
-          },
-        ],
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
-      setState(() {
-        imageCaption = '${responseData['choices'][0]['message']['content']}';
-      });
-    } else {
-      throw Exception('Failed to generate caption: ${response.statusCode} ${response.body}');
     }
   }
 }
