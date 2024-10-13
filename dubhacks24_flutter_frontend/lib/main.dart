@@ -18,6 +18,9 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   int _selectedIndex = 1;
+  final Color backColour = Color.fromARGB(255, 26, 2, 37);
+  final Color accentColour = Color.fromARGB(255, 149, 49, 109);
+  final Color textColour = Colors.white;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -33,11 +36,13 @@ class _MainAppState extends State<MainApp> {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           home: Scaffold(
+            extendBody: true,
             body: Center(
               child: getChild(),
             ),
             bottomNavigationBar: BottomNavigationBar(
-              backgroundColor: const Color.fromARGB(255, 255, 225, 225),
+              elevation: 10,
+              backgroundColor: Colors.transparent,
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
                   icon: Icon(Icons.book),
@@ -54,8 +59,8 @@ class _MainAppState extends State<MainApp> {
               ],
               currentIndex: _selectedIndex,
               onTap: _onItemTapped,
-              selectedItemColor: const Color.fromARGB(135, 188, 19, 249),
-              unselectedItemColor: const Color.fromARGB(255, 26, 2, 37),
+              selectedItemColor: textColour,
+              unselectedItemColor: accentColour,
               showUnselectedLabels: true,
             ),
           )

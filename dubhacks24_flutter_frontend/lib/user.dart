@@ -78,8 +78,8 @@ class UserPageState extends State<UserPage> {
           context,
           MaterialPageRoute(
             builder: (context) => ImageViewer(
-              initialIndex: index, // Start at the tapped image
-              imagePaths: accProvider.posts.map((post) => post.imageLink).toList(), // Pass full list of image URLs
+              initialIndex: index,
+              posts: accProvider.posts, // Pass the full list of posts
             ),
           ),
         );
@@ -126,14 +126,29 @@ class UserPageState extends State<UserPage> {
                   Column(
                     children: [
                       Text(
+                        'Posts',
+                        style: TextStyle(
+                            fontSize: 12, color: textColour),
+                      ),
+                      Text(
+                        '${accProvider.posts.length}',
+                        style: TextStyle(
+                            fontSize: 14, color: textColour, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 30),
+                  Column(
+                    children: [
+                      Text(
                         'Followers',
                         style: TextStyle(
-                            fontSize: 14, color: textColour),
+                            fontSize: 12, color: textColour),
                       ),
                       Text(
                         '${accProvider.followers.length}',
                         style: TextStyle(
-                            fontSize: 14, color: textColour),
+                            fontSize: 14, color: textColour, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -143,12 +158,12 @@ class UserPageState extends State<UserPage> {
                       Text(
                         'Following',
                         style: TextStyle(
-                            fontSize: 14, color: textColour),
+                            fontSize: 12, color: textColour),
                       ),
                       Text(
                         '${accProvider.following.length}',
                         style: TextStyle(
-                            fontSize: 14, color: textColour),
+                            fontSize: 14, color: textColour, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -164,9 +179,13 @@ class UserPageState extends State<UserPage> {
 
 class ImageViewer extends StatelessWidget {
   final int initialIndex;
-  final List<String> imagePaths;
+  final List<DreamPost> posts; // Change to a list of posts
 
-  const ImageViewer({super.key, required this.initialIndex, required this.imagePaths});
+  const ImageViewer({
+    super.key,
+    required this.initialIndex,
+    required this.posts,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -175,13 +194,50 @@ class ImageViewer extends StatelessWidget {
       body: PageView.builder(
         scrollDirection: Axis.vertical,
         controller: PageController(initialPage: initialIndex),
-        itemCount: imagePaths.length,
+        itemCount: posts.length,
         itemBuilder: (context, index) {
-          return Center(
-            child: Image.asset(imagePaths[index]),
+          final post = posts[index]; // Get the current post
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Image.asset(post.imageLink),
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      post.caption, // Display the post's caption
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      softWrap: true,
+                      // overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      getDate(post.time), // Display the post's time
+                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           );
         },
       ),
     );
   }
+}
+
+String getMinute(int time) {
+  if (time < 10) {
+    return '0$time';
+  }
+  return time.toString();
+}
+
+String getDate(DateTime time) {
+  return '${(time.month)}/${time.day}/${time.year}  ${time.hour}:${getMinute(time.minute)}';
 }

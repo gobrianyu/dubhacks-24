@@ -1,3 +1,4 @@
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -17,8 +18,10 @@ class DiaryEntry extends StatefulWidget {
 // State for EntryView
 class _DiaryEntryState extends State<DiaryEntry>{
   String currentText = ''; // Text field that we update.
-  String currentName = ''; // Title/name field that we update.
   String imageUrl = '';
+  final Color backColour = Color.fromARGB(255, 26, 2, 37);
+  final Color accentColour = Color.fromARGB(255, 149, 49, 109);
+  final Color textColour = Colors.white;
 
 
   // Initialises state to have currentText be original entry text,
@@ -32,45 +35,75 @@ class _DiaryEntryState extends State<DiaryEntry>{
   // Building the view.
   @override
   Widget build(BuildContext context) {
-    Color textColour = const Color.fromARGB(255, 84, 66, 61); // Primary text colour for light mode.
-    Color secondaryTextColour = const Color.fromARGB(150, 84, 66, 61); // Secondary text colour for light mode.
-    
-    return Scaffold(
-
-        // Editable title text field.
-        appBar: AppBar(
-          title: Text(getDate(DateTime.now()))
-        ),
-
-        // Main editable text field body.
-        body: Stack(
-          alignment: Alignment.bottomRight,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: TextFormField(
-                autofocus: true,
-                initialValue: currentText,
-                expands: true,
-                maxLines: null,
-                decoration: const InputDecoration(border: InputBorder.none),
-                onChanged: (text) => {currentText = text},
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.pending),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomCenter,
+          colors: [
+            accentColour,
+            backColour
+          ],
+        )
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+          // Editable title text field.
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.white), // Custom back button icon
               onPressed: () {
-                generateImage(currentText);
+                Navigator.pop(context); // Manually control the back navigation
               },
             ),
-            imageUrl.isNotEmpty ? 
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: Image.network(imageUrl), // Display the generated image
-              ) : const SizedBox()
-          ],
-        ),          
-      );
+            backgroundColor: Colors.transparent,
+            title: Text(getDate(DateTime.now()), style: TextStyle(color: textColour, fontWeight: FontWeight.w500),)
+          ),
+      
+          // Main editable text field body.
+          body: Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: TextFormField(
+                    autofocus: true,
+                    initialValue: currentText,
+                    expands: true,
+                    maxLines: null,
+                    decoration: const InputDecoration(border: InputBorder.none),
+                    onChanged: (text) => {currentText = text},
+                    style: TextStyle(color: textColour),
+                    cursorColor: Colors.white
+                  ),
+                ),
+              ),
+              imageUrl.isNotEmpty
+                ? Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Image.network(imageUrl), // Display the generated image
+                ) 
+                : const SizedBox(),
+              GestureDetector(
+                onTap: () {
+                  if (currentText.trim() != '') {
+                    generateImage(currentText);
+                  }
+                },                
+                child: Container(
+                  padding: EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
+                  decoration: BoxDecoration(
+                    color: textColour,
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                  child: Text(imageUrl.isNotEmpty ? 'Regenerate Image' : 'Generate Image with DALL-E 3', style: TextStyle(fontWeight: FontWeight.bold, color: backColour))
+                ),
+              ),
+              SizedBox(height: 30)
+            ],
+          ),          
+        ),
+    );
   }
 
   Future<void> generateImage(String prompt) async {

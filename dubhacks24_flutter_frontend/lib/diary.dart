@@ -71,7 +71,7 @@ class DiaryState extends State<Diary> {
                         // Circular countdown timer behind the button
                         Positioned(
                           right: 0,
-                          bottom: 20,
+                          bottom: 75,
                           child: CircularCountDownTimer(
                             duration: 10, // 10 seconds countdown
                             initialDuration: 0,
@@ -109,7 +109,7 @@ class DiaryState extends State<Diary> {
                             children: [
                               Spacer(),
                               Container(
-                                margin: EdgeInsets.only(bottom: 20),
+                                margin: EdgeInsets.only(bottom: 75),
                                 height: 80,
                                 width: 80,
                                 decoration: BoxDecoration(
