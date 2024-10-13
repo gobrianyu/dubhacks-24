@@ -1,11 +1,11 @@
-# dubhacks-24: LunaLogs
+# dubhacks-24: LunaLog
 
-LunaLogs is a mobile app (tested in Android, but should successfully compile in iOS) developed with Flutter and Dart. Python backend is available in repo and served as outlines but was not used in final product. LunaLogs is developed by Sulaimaan Khurrum, Brian Yu, Chi Dang, and Tamsyn Henke for DubHacks 2024.
+LunaLog is a mobile app (tested in Android, but should successfully compile in iOS) developed with Flutter and Dart. Python backend is available in repo and served as outlines but was not used in final product. LunaLogs is developed by Sulaimaan Khurrum, Brian Yu, Chi Dang, and Tamsyn Henke for DubHacks 2024.
 
 Title track: Universal Wellness (Angelfin)
 
 ### Concept
-LunaLogs is a mobile app promoting the discourse of dreams. Inspired partly by BeReal's concept, users can post once a day upon waking up. This would be set as via a native OS call when the user first awakens their phone for the day; after ~8 hours of rest. This serves as an incentive to users to have healthy sleep habits. For the next 30 minutes, users can submit a dream journal via a text editor. Once the dream has been recorded, the user can then use an array of AI tools, such as text enhancement and image generation, to spice up their posts. On the home page, users can spend some time viewing and filtering through the dreamscapes of close friends and family.
+LunaLog is a mobile app promoting the discourse of dreams. Inspired partly by BeReal's concept, users can post once a day upon waking up. This would be set as via a native OS call when the user first awakens their phone for the day; after ~8 hours of rest. This serves as an incentive to users to have healthy sleep habits. For the next 30 minutes, users can submit a dream journal via a text editor. Once the dream has been recorded, the user can then use an array of AI tools, such as text enhancement and image generation, to spice up their posts. On the home page, users can spend some time viewing and filtering through the dreamscapes of close friends and family.
 
 ### Implementation
 #### APIs
