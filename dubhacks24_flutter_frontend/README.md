@@ -1,7 +1,7 @@
 # dubhacks24_flutter_frontend
 
 todos for sunday:
-- powerpoint presentation ; HIGH PRIORITY / UI screenshots will be temporarily placed under assets/images
+- powerpoint presentation ; HIGH PRIORITY / UI screenshots will be temporarily placed under assets/images/demo_screenshots
     - presentation setup (i.e. video?, features to demo, etc)
 - hard-coding posts for homepage ; HIGH PRIORITY
 - hive secure storage ; low priority
