@@ -27,35 +27,29 @@ class UserPageState extends State<UserPage> {
   }
 
   Widget _photoGrid() {
-    return Expanded( // Wrap with Expanded
-      child: GridView.count(
-        crossAxisCount: 3,
-        childAspectRatio: 1.0,
-        children: List.generate(21, (index) => _gridTile('image')),
-      ),
-    );
-  }
+  return Expanded(
+    child: GridView.count(
+      crossAxisCount: 3, // 3 columns in the grid
+      childAspectRatio: 1.0, // Square tiles
+      children: List.generate(21, (index) => _gridTile('assets/images/pic.jpg')), // Pass image path dynamically
+    ),
+  );
+}
 
-  Widget _gridTile(String str) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: const Color.fromARGB(136, 230, 163, 255),
-          width: 0.3,
-        ),
+Widget _gridTile(String imagePath) {
+  return Container(
+    decoration: BoxDecoration(
+      border: Border.all(
+        color: const Color.fromARGB(136, 230, 163, 255),
+        width: 0.3, // Border width around each tile
       ),
-      child: Center(
-        child: Text(
-          str, // Use str instead of 'image' for flexibility
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-            color: const Color.fromARGB(136, 230, 163, 255),
-          ),
-        ),
-      ),
-    );
-  }
+    ),
+    child: Center(
+      child: Image.asset(imagePath), // Use imagePath for flexibility
+    ),
+  );
+}
+
 
   Widget _profileInfo() {
     return Padding(
