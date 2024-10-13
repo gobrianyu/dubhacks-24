@@ -20,7 +20,6 @@ class UserPageState extends State<UserPage> {
           children: [
             _profileInfo(),
             _photoGrid(),
-
           ],
         ),
       ),
