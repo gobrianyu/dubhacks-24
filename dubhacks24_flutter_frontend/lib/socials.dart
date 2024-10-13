@@ -21,7 +21,7 @@ class SocialsState extends State<Socials> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color.fromARGB(255, 26, 2, 37),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50),

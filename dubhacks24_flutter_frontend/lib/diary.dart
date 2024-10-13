@@ -1,4 +1,5 @@
 import 'package:dubhacks24_flutter_frontend/account_provider.dart';
+import 'package:dubhacks24_flutter_frontend/diary_entry.dart';
 import 'package:dubhacks24_flutter_frontend/post.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -24,17 +25,39 @@ class DiaryState extends State<Diary> {
 
   @override
   Widget build(BuildContext context) {
+    final DateTime now = DateTime.now();
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Stack(
+          alignment: Alignment.bottomRight,
           children: [
-            _calendar(),
-            const SizedBox(height: 20),
-            _postList(), // Display posts matching the selected day
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _calendar(),
+                const SizedBox(height: 20),
+                _postList(), // display posts matching the selected day
+              ],
+            ),
+            selectedDay.day == now.day && selectedDay.month == now.month && selectedDay.year == now.year 
+            ? GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DiaryEntry()),
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.blue
+                ),
+              ),
+            )
+            : Container()
           ],
         ),
       ),
@@ -43,19 +66,18 @@ class DiaryState extends State<Diary> {
 
   Widget _calendar() {
     return TableCalendar(
-      focusedDay: selectedDay, // Set focused day to the selected day
+      focusedDay: selectedDay, // set focused day to the selected day
       firstDay: DateTime.now().subtract(const Duration(days: 100)),
       lastDay: DateTime.now(),
       onDaySelected: (selectedDay, focusedDay) {
         setState(() {
-          this.selectedDay = selectedDay; // Update the selected day
-          // Ensure focusedDay is also updated
+          this.selectedDay = selectedDay; //update selected day
         });
       },
       availableCalendarFormats: const {
         CalendarFormat.month: 'Week',
         CalendarFormat.twoWeeks: 'Month',
-        CalendarFormat.week: '2 Week',
+        CalendarFormat.week: '2 Week', // broken package wtf
       },
       calendarFormat: _calendarFormat,
       onFormatChanged: (format) {
@@ -67,7 +89,7 @@ class DiaryState extends State<Diary> {
   }
 
   Widget _postList() {
-    // Filter posts for the selected day
+    // filter posts for selected day
     List<DreamPost> postsForSelectedDay = feed.where((post) {
       return post.time.year == selectedDay.year &&
              post.time.month == selectedDay.month &&
@@ -75,12 +97,23 @@ class DiaryState extends State<Diary> {
     }).toList();
 
     if (postsForSelectedDay.isEmpty) {
-      return const Text('No posts for this day.');
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(getDate(selectedDay), style: TextStyle(fontWeight: FontWeight.w500)),
+          SizedBox(height: 10),
+          Text('No posts for this day.'),
+        ],
+      );
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: postsForSelectedDay.map((post) => _post(post)).toList(),
+      children: [
+        Text(getDate(selectedDay), style: TextStyle(fontWeight: FontWeight.w500)),
+        SizedBox(height: 10),
+        ...postsForSelectedDay.map((post) => _post(post)).toList()
+      ]
     );
   }
 
@@ -91,7 +124,7 @@ class DiaryState extends State<Diary> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(post.username, style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(getDate(post.time)),
+          Text('${post.time.hour}:${post.time.minute}'),
           const SizedBox(height: 5),
           Text(post.caption),
           const Divider(),
@@ -130,9 +163,6 @@ String monthAsAbbrevString(int month) {
 String getDate(DateTime time) {
   final DateTime now = DateTime.now();
   if (time.year == now.year) {
-    if (time.month == now.month && time.day == now.day) {
-      return '${time.hour}:${time.minute}';
-    }
     return '${monthAsAbbrevString(time.month)} ${time.day}';
   }
   return '${monthAsAbbrevString(time.month)} ${time.day}, ${time.year}';
