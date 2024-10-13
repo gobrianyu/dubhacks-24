@@ -18,6 +18,7 @@ class DiaryState extends State<Diary> {
   final CountDownController _countdownController = CountDownController();
   DateTime selectedDay = DateTime.now(); // Track the selected day
   CalendarFormat _calendarFormat = CalendarFormat.week;
+  bool lockout = false;
   final textColour = Colors.white;
 
   @override
@@ -49,64 +50,65 @@ class DiaryState extends State<Diary> {
                 _postList(), // display posts matching the selected day
               ],
             ),
-            selectedDay.day == now.day && selectedDay.month == now.month && selectedDay.year == now.year 
+            selectedDay.day == now.day && selectedDay.month == now.month && selectedDay.year == now.year && !lockout
             ? Stack(
               alignment: Alignment.bottomRight,
-                    children: [
-                      // Circular countdown timer behind the button
-                      Positioned(
-                        right: 0,
-                        bottom: 20,
-                        child: CircularCountDownTimer(
-                          duration: 600, // 10 seconds countdown
-                          initialDuration: 0,
-                          controller: _countdownController,
-                          width: 80, // Adjust width
-                          height: 80, // Adjust height
-                          ringColor: Colors.purpleAccent[100]!,
-                          fillColor: Colors.grey[300]!,
-                          backgroundColor: Colors.purple[500],
-                          strokeWidth: 10.0,
-                          textStyle: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                          textFormat: CountdownTextFormat.S,
-                          isReverse: true,
-                          isTimerTextShown: true,
-                          autoStart: false, // Starts in initState
-                          onComplete: () {
-                            debugPrint('Countdown Ended');
-                          },
+                children: [
+                  // Circular countdown timer behind the button
+                  Positioned(
+                    right: 0,
+                    bottom: 20,
+                    child: CircularCountDownTimer(
+                      duration: 10, // 10 seconds countdown
+                      initialDuration: 0,
+                      controller: _countdownController,
+                      width: 80, // Adjust width
+                      height: 80, // Adjust height
+                      ringColor: Colors.purpleAccent[100]!,
+                      fillColor: Colors.grey[300]!,
+                      backgroundColor: Colors.purple[500],
+                      strokeWidth: 10.0,
+                      textStyle: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                      textFormat: CountdownTextFormat.S,
+                      isReverse: true,
+                      isTimerTextShown: true,
+                      autoStart: false, // Starts in initState
+                      onComplete: () {
+                        debugPrint('Countdown Ended');
+                        setState(() => lockout = true);
+                      },
+                    ),
+                  ),
+                  // GestureDetector with a button in front of the timer
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DiaryEntry()), // Assumed DiaryEntry is another page
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Container(
+                          margin: EdgeInsets.only(bottom: 20),
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.blue),
+                          child: Icon(Icons.draw,
+                              color: Colors.white, size: 40),
                         ),
-                      ),
-                      // GestureDetector with a button in front of the timer
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DiaryEntry()), // Assumed DiaryEntry is another page
-                          );
-                        },
-                        child: Row(
-                          children: [
-                            Spacer(),
-                            Container(
-                              margin: EdgeInsets.only(bottom: 20),
-                              height: 80,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle, color: Colors.blue),
-                              child: Icon(Icons.draw,
-                                  color: Colors.white, size: 40),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-                : Container()
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            : Container()
           ],
         ),
       ),
