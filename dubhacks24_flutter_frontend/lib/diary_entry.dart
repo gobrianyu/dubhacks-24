@@ -222,7 +222,7 @@ class _DiaryEntryState extends State<DiaryEntry>{
     const String baseUrl = "https://api.perplexity.ai";
     const String endpoint = "/chat/completions";
     
-    final String finalPrompt = "Summarize under 500 characters: $prompt. Write from the perspective of a person posting about their own dream on social media.";
+    final String finalPrompt = "Summarize under 500 characters: $prompt. Write from the perspective of a person talking about their own dream.";
 
     final Map<String, dynamic> requestBody = {
       "model": "llama-3.1-sonar-small-128k-chat",
