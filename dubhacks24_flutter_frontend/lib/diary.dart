@@ -113,9 +113,9 @@ class DiaryState extends State<Diary> {
                                 height: 80,
                                 width: 80,
                                 decoration: BoxDecoration(
-                                    shape: BoxShape.circle, color: Colors.blue),
+                                    shape: BoxShape.circle, color: textColour),
                                 child: Icon(Icons.draw,
-                                    color: Colors.white, size: 40),
+                                    color: backColour, size: 40),
                               ),
                             ],
                           ),
@@ -221,16 +221,23 @@ class DiaryState extends State<Diary> {
 
   Widget _post(DreamPost post) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('${post.time.hour}:${getMinute(post.time.minute)}', style: TextStyle(color: textColour)),
-          const Divider(),
-          post.imageLink != '' ? Image(image: AssetImage(post.imageLink)) : const SizedBox(),
-          const SizedBox(height: 5),
-          Text(post.caption, style: TextStyle(color: textColour)),
-        ],
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.white),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        padding: EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('${post.time.hour}:${getMinute(post.time.minute)}', style: TextStyle(color: textColour)),
+            const Divider(),
+            post.imageLink != '' ? Image(image: AssetImage(post.imageLink)) : const SizedBox(),
+            const SizedBox(height: 5),
+            Text(post.caption, style: TextStyle(color: textColour)),
+          ],
+        ),
       ),
     );
   }

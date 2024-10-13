@@ -29,21 +29,21 @@ class AccountProvider extends ChangeNotifier {
 
   List<DreamPost> get myPosts => List.from(posts);
 
-  void _addPost(DreamPost post) {
+  void addPost(DreamPost post) {
     posts.add(post);
     notifyListeners();
   }
 
-  void _updateUsername(String newName) {
+  void updateUsername(String newName) {
     username = newName;
     notifyListeners();
   }
 
-  void _addFollower(String followerName) {
+  void addFollower(String followerName) {
     followers.add(followerName);
   }
 
-  void _addFollowing(String followingName) {
+  void addFollowing(String followingName) {
     following.add(followingName);
   }
 }
