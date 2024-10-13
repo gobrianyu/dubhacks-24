@@ -99,8 +99,8 @@ class UserPageState extends State<UserPage> {
       child: Row(
         children: [
           Container(
-            height: 60,
-            width: 60,
+            height: 80,
+            width: 80,
             decoration: BoxDecoration(
               border: Border.all(
                 color: textColour,
@@ -126,6 +126,7 @@ class UserPageState extends State<UserPage> {
                     fontWeight: FontWeight.bold,
                     color: textColour),
               ),
+              SizedBox(height: 8),
               Row(
                 children: [
                   Column(
@@ -133,7 +134,7 @@ class UserPageState extends State<UserPage> {
                       Text(
                         'Posts',
                         style: TextStyle(
-                            fontSize: 12, color: textColour),
+                            fontSize: 14, color: textColour),
                       ),
                       Text(
                         '${posts.length}',
@@ -148,7 +149,7 @@ class UserPageState extends State<UserPage> {
                       Text(
                         'Followers',
                         style: TextStyle(
-                            fontSize: 12, color: textColour),
+                            fontSize: 14, color: textColour),
                       ),
                       Text(
                         '${accProvider.followers.length}',
@@ -163,7 +164,7 @@ class UserPageState extends State<UserPage> {
                       Text(
                         'Following',
                         style: TextStyle(
-                            fontSize: 12, color: textColour),
+                            fontSize: 14, color: textColour),
                       ),
                       Text(
                         '${accProvider.following.length}',

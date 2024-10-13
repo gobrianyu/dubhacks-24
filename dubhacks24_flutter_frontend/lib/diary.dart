@@ -139,6 +139,7 @@ class DiaryState extends State<Diary> {
   Widget _calendar() {
     return TableCalendar(
       focusedDay: selectedDay, // set focused day to the selected day
+      currentDay: selectedDay,
       firstDay: DateTime.now().subtract(const Duration(days: 100)),
       lastDay: DateTime.now(),
       onDaySelected: (selectedDay, focusedDay) {
