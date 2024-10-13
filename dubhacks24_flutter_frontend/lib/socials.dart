@@ -81,6 +81,12 @@ class SocialsState extends State<Socials> {
                 border: Border.all(color: textColour, width: 1.5),
                 shape: BoxShape.circle
               ),
+              child: ClipOval(
+                child: Image.asset(
+                  post.profilePic, // Load the profile picture from assets
+                  fit: BoxFit.cover, // Ensure the image covers the circle without distortion
+                ),
+              ),
             ),
             Text(post.username, style: TextStyle(color: textColour, fontWeight: FontWeight.w600, fontSize: 17)),
             Spacer(),
@@ -93,12 +99,13 @@ class SocialsState extends State<Socials> {
             margin: EdgeInsets.only(top: 10),
             decoration: BoxDecoration(
               border: Border.all(color: Color.fromARGB(136, 230, 163, 255))
-            )
+            ),
+            child: Image.asset(post.imageLink) // picture
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 5, bottom: 5),
-          child: Text('Some really long test caption.', style: TextStyle(color: textColour)),
+          child: Text(post.caption, style: TextStyle(color: textColour)),
         ),
         SizedBox(height: 30)
       ],
@@ -155,10 +162,12 @@ class SocialsState extends State<Socials> {
 
   // temp? tester function to hardcode posts in user's feed
   void initFeed() {
-    final post1 = DreamPost(username: 'nano.d3m', time: DateTime.now(), profilePic: 'unknown', caption: '@dubhacks for 2024. 10th year anni!', imageLink: '');
-    final post2 = DreamPost(username: 'rando', time: DateTime.now(), profilePic: 'profilePic', caption: 'RAHHHH', imageLink: '');
+    final post1 = DreamPost(username: 'nano.d3m', time: DateTime.now(), profilePic: 'assets/images/kiko.jpg', caption: '@dubhacks for 2024. 10th year anni!', imageLink: 'assets/images/sample_post_picture_1.png');
+    final post2 = DreamPost(username: 'rando', time: DateTime.now(), profilePic: 'assets/images/default.png', caption: 'RAHHHH', imageLink: 'assets/images/sample_post_picture_2.png');
+    final post3 = DreamPost(username: 'i.mallard', time: DateTime.now(), profilePic: 'assets/images/pic.jpg', caption: 'Why was I dreaming of books lol', imageLink: 'assets/images/sample_post_picture_3.png');
     feed.add(post1);
     feed.add(post2);
+    feed.add(post3);
   }
 }
 
