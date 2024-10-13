@@ -135,8 +135,8 @@ class SocialsState extends State<Socials> {
 
   // temp? tester function to hardcode posts in user's feed
   void initFeed() {
-    final post1 = DreamPost(username: 'nano.d3m', time: DateTime.now(), profilePic: 'unknown', caption: '@dubhacks for 2024. 10th year anni!');
-    final post2 = DreamPost(username: 'rando', time: DateTime.now(), profilePic: 'profilePic', caption: 'RAHHHH');
+    final post1 = DreamPost(username: 'nano.d3m', time: DateTime.now(), profilePic: 'unknown', caption: '@dubhacks for 2024. 10th year anni!', imageLink: '');
+    final post2 = DreamPost(username: 'rando', time: DateTime.now(), profilePic: 'profilePic', caption: 'RAHHHH', imageLink: '');
     feed.add(post1);
     feed.add(post2);
   }

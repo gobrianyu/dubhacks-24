@@ -88,10 +88,29 @@ class UserPageState extends State<UserPage> {
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 141, 150, 252)),
               ),
-              Text(
-                'Followers: 1000   Following: 500',
-                style: TextStyle(
-                    fontSize: 14, color: Color.fromARGB(255, 234, 169, 105)),
+              Row(
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        'Followers',
+                        style: TextStyle(
+                            fontSize: 14, color: Color.fromARGB(255, 234, 169, 105)),
+                      ),
+                      Text(
+                        '${100}',
+                        style: TextStyle(
+                            fontSize: 14, color: Color.fromARGB(255, 234, 169, 105)),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 30),
+                  Text(
+                    'Following: 500',
+                    style: TextStyle(
+                        fontSize: 14, color: Color.fromARGB(255, 234, 169, 105)),
+                  ),
+                ],
               ),
             ],
           ),

@@ -1,9 +1,9 @@
 class DreamPost {
   final String username;
   final DateTime time;
-  final profilePic;
+  final String profilePic;
   final String caption;
-  // post + user pfp as images
+  final String imageLink;
 
-  DreamPost({required this.username, required this.time, required this.profilePic, required this.caption});
+  DreamPost({required this.username, required this.imageLink, required this.time, required this.profilePic, required this.caption});
 }

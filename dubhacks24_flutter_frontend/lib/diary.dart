@@ -16,6 +16,7 @@ class DiaryState extends State<Diary> {
   final List<DreamPost> feed = [];
   DateTime selectedDay = DateTime.now(); // Track the selected day
   CalendarFormat _calendarFormat = CalendarFormat.week;
+  final textColour = Colors.white;
 
   @override
   void initState() {
@@ -28,7 +29,7 @@ class DiaryState extends State<Diary> {
     final DateTime now = DateTime.now();
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromARGB(255, 26, 2, 37),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
         child: Stack(
@@ -94,6 +95,36 @@ class DiaryState extends State<Diary> {
           _calendarFormat = format;
         });
       },
+      calendarStyle: CalendarStyle(
+        defaultTextStyle: TextStyle(color: Colors.white), // Default day text
+        weekendTextStyle: TextStyle(color: Colors.redAccent), // Weekend day text
+        selectedDecoration: BoxDecoration(
+          color: Colors.deepPurple, // Selected day background color
+          shape: BoxShape.circle,
+        ),
+        todayDecoration: BoxDecoration(
+          color: Color.fromARGB(255, 176, 91, 170), // Current day background color
+          shape: BoxShape.circle,
+        ),
+        todayTextStyle: TextStyle(color: Colors.white), // Current day text color
+        outsideDaysVisible: false, // Hide days outside the selected month
+      ),
+      
+      headerStyle: HeaderStyle(
+        titleTextStyle: TextStyle(color: textColour), // Header title text color
+        formatButtonTextStyle: TextStyle(color: textColour),
+        formatButtonDecoration: BoxDecoration(
+          color: Colors.grey.shade800, // Format button background
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        leftChevronIcon: Icon(Icons.chevron_left, color: textColour),
+        rightChevronIcon: Icon(Icons.chevron_right, color: textColour),
+      ),
+
+      daysOfWeekStyle: DaysOfWeekStyle(
+        weekdayStyle: TextStyle(color: Colors.grey.shade400), // Weekday labels
+        weekendStyle: TextStyle(color: Colors.redAccent), // Weekend labels
+      ),
     );
   }
 
@@ -106,12 +137,16 @@ class DiaryState extends State<Diary> {
     }).toList();
 
     if (postsForSelectedDay.isEmpty) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      return Row(
         children: [
-          Text(getDate(selectedDay), style: TextStyle(fontWeight: FontWeight.w500)),
-          SizedBox(height: 10),
-          Text('No posts for this day.'),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(getDate(selectedDay), style: TextStyle(fontWeight: FontWeight.w500, color: textColour)),
+              SizedBox(height: 10),
+              Text('No post for this day.', style: TextStyle(color: textColour)),
+            ],
+          ),
         ],
       );
     }
@@ -119,9 +154,9 @@ class DiaryState extends State<Diary> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(getDate(selectedDay), style: TextStyle(fontWeight: FontWeight.w500)),
+        Text(getDate(selectedDay), style: TextStyle(fontWeight: FontWeight.w500, color: textColour)),
         SizedBox(height: 10),
-        ...postsForSelectedDay.map((post) => _post(post)).toList()
+        ...postsForSelectedDay.map((post) => _post(post))
       ]
     );
   }
@@ -132,10 +167,11 @@ class DiaryState extends State<Diary> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(post.username, style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text('${post.time.hour}:${post.time.minute}'),
+          Text(post.username, style: TextStyle(fontWeight: FontWeight.bold, color: textColour)),
+          Text('${post.time.hour}:${post.time.minute}', style: TextStyle(color: textColour)),
+          post.imageLink != '' ? Image.network(post.imageLink) : const SizedBox(),
           const SizedBox(height: 5),
-          Text(post.caption),
+          Text(post.caption, style: TextStyle(color: textColour)),
           const Divider(),
         ],
       ),
@@ -143,8 +179,8 @@ class DiaryState extends State<Diary> {
   }
 
   void initFeed() {
-    final post1 = DreamPost(username: 'nano.d3m', time: DateTime.now().subtract(const Duration(days: 1)), profilePic: 'unknown', caption: '@dubhacks for 2024. 10th year anni!');
-    final post2 = DreamPost(username: 'rando', time: DateTime.now(), profilePic: 'profilePic', caption: 'RAHHHH');
+    final post1 = DreamPost(username: 'nano.d3m', time: DateTime.now().subtract(const Duration(days: 1)), profilePic: 'unknown', caption: '@dubhacks for 2024. 10th year anni!', imageLink: '');
+    final post2 = DreamPost(username: 'rando', time: DateTime.now(), profilePic: 'profilePic', caption: 'RAHHHH', imageLink: '');
     feed.add(post1);
     feed.add(post2);
   }

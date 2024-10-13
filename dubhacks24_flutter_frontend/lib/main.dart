@@ -3,6 +3,7 @@ import 'package:dubhacks24_flutter_frontend/diary.dart';
 import 'package:dubhacks24_flutter_frontend/socials.dart';
 import 'package:dubhacks24_flutter_frontend/user.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MainApp());
@@ -26,35 +27,39 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(
-          child: getChild(),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: const Color.fromARGB(255, 255, 225, 225),
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.book),
-              label: 'Diary',
+    return Consumer<AccountProvider>(
+      builder: (context, accountProvider, _) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: Scaffold(
+            body: Center(
+              child: getChild(),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
+            bottomNavigationBar: BottomNavigationBar(
+              backgroundColor: const Color.fromARGB(255, 255, 225, 225),
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.book),
+                  label: 'Diary',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              onTap: _onItemTapped,
+              selectedItemColor: const Color.fromARGB(135, 188, 19, 249),
+              unselectedItemColor: const Color.fromARGB(255, 26, 2, 37),
+              showUnselectedLabels: true,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          selectedItemColor: const Color.fromARGB(135, 188, 19, 249),
-          unselectedItemColor: const Color.fromARGB(255, 26, 2, 37),
-          showUnselectedLabels: true,
-        ),
-      )
+          )
+        );
+      }
     );
   }
 
