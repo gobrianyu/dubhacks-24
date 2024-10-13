@@ -92,7 +92,7 @@ class _DiaryEntryState extends State<DiaryEntry>{
 
   Future<void> generateImage(String prompt) async {
     print('debug: waiting');
-    final String apiKey = const String.fromEnvironment('OPEN_API_KEY'); // Replace with your OpenAI API key
+    final String apiKey = const String.fromEnvironment('OPEN_API_KEY');
     final String apiUrl = 'https://api.openai.com/v1/images/generations';
 
     final response = await http.post(
