@@ -1,13 +1,16 @@
 import 'package:dubhacks24_flutter_frontend/post.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class AccountProvider extends ChangeNotifier {
-  final DateTime accountStart; // account creation date
+  final DateTime accountStart;
   final List<DreamPost> posts;
   String username;
   final String pfp;
   final List<String> followers;
   final List<String> following;
+
+  static const String boxName = 'accountBox';
 
   AccountProvider({
     required this.username,
@@ -15,8 +18,29 @@ class AccountProvider extends ChangeNotifier {
     required this.posts,
     required this.pfp,
     required this.followers,
-    required this.following
+    required this.following,
   });
+
+  factory AccountProvider.fromHive() {
+    final box = Hive.box(boxName);
+    return AccountProvider(
+      username: box.get('username', defaultValue: 'defaultUser'),
+      accountStart: DateTime.parse(box.get('accountStart', defaultValue: DateTime.now().toIso8601String())),
+      posts: [], // Load from somewhere else or store in another box
+      pfp: box.get('pfp', defaultValue: 'assets/images/default.png'),
+      followers: List<String>.from(box.get('followers', defaultValue: [])),
+      following: List<String>.from(box.get('following', defaultValue: [])),
+    );
+  }
+
+  void saveToHive() {
+    final box = Hive.box(boxName);
+    box.put('username', username);
+    box.put('accountStart', accountStart.toIso8601String());
+    box.put('pfp', pfp);
+    box.put('followers', followers);
+    box.put('following', following);
+  }
 
   factory AccountProvider.fromNew({required username}) {
     return AccountProvider(username: username, accountStart: DateTime.now(), posts: [], followers: [], following: [], pfp: 'assets/images/default.png');
@@ -31,20 +55,26 @@ class AccountProvider extends ChangeNotifier {
 
   void addPost(DreamPost post) {
     posts.add(post);
+    saveToHive();
     notifyListeners();
   }
 
   void updateUsername(String newName) {
     username = newName;
+    saveToHive();
     notifyListeners();
   }
 
   void addFollower(String followerName) {
     followers.add(followerName);
+    saveToHive();
+    notifyListeners();
   }
 
   void addFollowing(String followingName) {
     following.add(followingName);
+    saveToHive();
+    notifyListeners();
   }
 }
 

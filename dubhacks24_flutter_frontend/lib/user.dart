@@ -13,8 +13,8 @@ class UserPage extends StatefulWidget {
 }
 
 class UserPageState extends State<UserPage> {
-  final Color backColour = Color.fromARGB(255, 26, 2, 37);
-  final Color accentColour = Color.fromARGB(255, 149, 49, 109);
+  final Color backColour = const Color.fromARGB(255, 26, 2, 37);
+  final Color accentColour = const Color.fromARGB(255, 149, 49, 109);
   final Color textColour = Colors.white;
   late final AccountProvider accProvider;
 
@@ -139,7 +139,7 @@ class UserPageState extends State<UserPage> {
                       ),
                     ],
                   ),
-                  SizedBox(width: 30),
+                  const SizedBox(width: 30),
                   Column(
                     children: [
                       Text(
@@ -154,7 +154,7 @@ class UserPageState extends State<UserPage> {
                       ),
                     ],
                   ),
-                  SizedBox(width: 30),
+                  const SizedBox(width: 30),
                   Column(
                     children: [
                       Text(
@@ -216,14 +216,14 @@ class ImageViewer extends StatelessWidget {
                     children: [
                       Text(
                         post.caption, // Display the post's caption
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style: const TextStyle(color: Colors.white, fontSize: 16),
                         softWrap: true,
                         // overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 8),
                       Text(
                         getDate(post.time), // Display the post's time
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
+                        style: const TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                     ],
                   ),
