@@ -99,8 +99,7 @@ class SocialsState extends State<Socials> {
             margin: EdgeInsets.only(top: 10),
             decoration: BoxDecoration(
               border: Border.all(color: Color.fromARGB(136, 230, 163, 255))
-            ),
-            child: ClipRect(child: Image(image: AssetImage(post.imageLink), fit: BoxFit.cover))
+            )
           ),
         ),
         Padding(
@@ -162,10 +161,10 @@ class SocialsState extends State<Socials> {
 
   // temp? tester function to hardcode posts in user's feed
   void initFeed() {
-    feed.add(DreamPost(username: 'dubhacks@uw', time: DateTime.parse('2024-10-13 08:44:00Z'), profilePic: 'assets/images/dubhacks.png', caption: 'Just had the craziest dream I was working on a hackathon project late into the night, but there was this eerie feeling with a pair of eyes staring at me. Anyone else ever have those unsettling dreams? 🌃🕵️ #Dreams #Hackathon', imageLink: 'assets/images/6.png'));
-    feed.add(DreamPost(username: 'kcheebe', time: DateTime.parse('2024-10-13 06:35:00Z'), profilePic: 'assets/images/default.png', caption: 'Hey everyone I just had the craziest dream last night. I was walking through a lush green meadow filled with adorable llamas. They were all so fluffy and friendly, and I couldn\'t help but feel a deep connection to them. I know it sounds silly, but it really left an impression on me. Anyone else ever have dreams that feel so real? #LlamaDreams #DreamsThatFeelReal', imageLink: 'assets/images/7.png'));
-    feed.add(DreamPost(username: 'tamsynnn', time: DateTime.parse('2024-10-13 06:35:00Z'), profilePic: 'assets/images/default.png', caption: 'Just had the craziest dream I was at the zoo, and all the animals could talk. The monkeys were chatting about their favorite fruits, while the lions were discussing the latest savannah gossip. Even the penguins were sharing jokes. #TalkingAnimals #ZooDreams #WildNightmares', imageLink: 'assets/images/8.png'));
-    feed.add(DreamPost(username: 'mallard23', time: DateTime.parse('2024-10-13 06:35:00Z'), profilePic: 'assets/images/default.png', caption: 'I had a pretty vivid dream last night. In it, I was standing in a lush green meadow filled with llamas. Suddenly, one of the llamas started running frantically and fell into a deep hole that seemed to appear out of nowhere. The other llamas were startled and began to panic, trying to help their fallen friend. The scene was quite surreal and left me feeling a bit uneasy when I woke up. I\'m not sure what it could mean, but it\'s definitely stuck with me.', imageLink: 'assets/images/9.png'));
+    final post1 = DreamPost(username: 'nano.d3m', time: DateTime.now(), profilePic: 'unknown', caption: '@dubhacks for 2024. 10th year anni!', imageLink: '');
+    final post2 = DreamPost(username: 'rando', time: DateTime.now(), profilePic: 'profilePic', caption: 'RAHHHH', imageLink: '');
+    feed.add(post1);
+    feed.add(post2);
   }
 }
 
