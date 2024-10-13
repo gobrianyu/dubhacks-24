@@ -31,6 +31,7 @@ class _MainAppState extends State<MainApp> {
           child: getChild(),
         ),
         bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Color.fromARGB(255, 255, 225, 225),
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.book),
@@ -47,8 +48,8 @@ class _MainAppState extends State<MainApp> {
           ],
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
-          selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey,
+          selectedItemColor: const Color.fromARGB(135, 188, 19, 249),
+          unselectedItemColor: const Color.fromARGB(255, 26, 2, 37),
           showUnselectedLabels: true,
         ),
       )

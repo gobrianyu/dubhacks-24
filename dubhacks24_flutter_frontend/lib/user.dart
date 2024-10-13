@@ -12,7 +12,7 @@ class UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 26, 2, 37),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
         child: Column(
@@ -41,7 +41,7 @@ class UserPageState extends State<UserPage> {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-          color: Colors.black54,
+          color: const Color.fromARGB(136, 230, 163, 255),
           width: 0.3,
         ),
       ),
@@ -51,6 +51,7 @@ class UserPageState extends State<UserPage> {
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,
+            color: const Color.fromARGB(136, 230, 163, 255),
           ),
         ),
       ),
@@ -67,7 +68,7 @@ class UserPageState extends State<UserPage> {
             height: 60,
             width: 60,
             decoration: BoxDecoration(
-              border: Border.all(),
+              border: Border.all(color: const Color.fromARGB(255, 112, 230, 179),),
               shape: BoxShape.circle,
             ),
           ),
@@ -77,11 +78,11 @@ class UserPageState extends State<UserPage> {
             children: [
               Text(
                 'Username',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 141, 150, 252)),
               ),
               Text(
                 'Followers: 1000   Following: 500', // Example text
-                style: TextStyle(fontSize: 14),
+                style: TextStyle(fontSize: 14, color: Color.fromARGB(255, 234, 169, 105)),
               ),
             ],
           ),

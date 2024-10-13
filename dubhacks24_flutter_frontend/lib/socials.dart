@@ -22,7 +22,7 @@ class SocialsState extends State<Socials> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromARGB(255, 26, 2, 37),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
         child: Column(
@@ -58,13 +58,13 @@ class SocialsState extends State<Socials> {
               height: 50,
               width: 50,
               decoration: BoxDecoration(
-                border: Border.all(),
+                border: Border.all(color: const Color.fromARGB(255, 112, 230, 179),),
                 shape: BoxShape.circle
               ),
             ),
-            Text(post.username),
+            Text(post.username, style: TextStyle(color: Color.fromARGB(255, 141, 150, 252)),),
             Spacer(),
-            Text(getDate(post.time))
+            Text(getDate(post.time), style: TextStyle(color: Color.fromARGB(255, 234, 169, 105)),)
           ],
         ),
         AspectRatio(
@@ -72,13 +72,13 @@ class SocialsState extends State<Socials> {
           child: Container(
             margin: EdgeInsets.only(top: 10),
             decoration: BoxDecoration(
-              border: Border.all()
+              border: Border.all(color: Color.fromARGB(136, 230, 163, 255))
             )
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 5, bottom: 5),
-          child: Text('Some really long test caption.'),
+          child: Text('Some really long test caption.', style: TextStyle(color: Color.fromARGB(255, 141, 150, 252)),),
         ),
         SizedBox(height: 30)
       ],
@@ -92,7 +92,7 @@ class SocialsState extends State<Socials> {
       width: MediaQuery.of(context).size.width,
       height: 32,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color.fromARGB(255, 255, 225, 225),
         border: Border.all(width: 0.8),
         borderRadius: const BorderRadius.all(Radius.circular(16))
       ),
@@ -112,6 +112,7 @@ class SocialsState extends State<Socials> {
                 hintStyle: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.normal,
+                  color: Color.fromARGB(255, 26, 2, 37),
                 ),
                 border: const OutlineInputBorder(
                   borderSide: BorderSide.none,
