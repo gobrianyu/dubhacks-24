@@ -224,7 +224,6 @@ class DiaryState extends State<Diary> {
   }
 
   Widget _post(DreamPost post) {
-    print(post.imageLink.contains('/data/user'));
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Container(
@@ -238,7 +237,7 @@ class DiaryState extends State<Diary> {
           children: [
             Text('${post.time.hour}:${getMinute(post.time.minute)}', style: TextStyle(color: textColour)),
             const Divider(),
-            post.imageLink != '' ? post.imageLink.contains('/data/user') ? Image.file(File(post.imageLink)) :Image(image: AssetImage(post.imageLink)) : const SizedBox(),
+            post.imageLink != '' ? post.imageLink.contains('/data/user') ? Image.file(File(post.imageLink)) : Image(image: AssetImage(post.imageLink)) : const SizedBox(),
             const SizedBox(height: 5),
             Text(post.caption, style: TextStyle(color: textColour)),
           ],

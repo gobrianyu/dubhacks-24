@@ -17,11 +17,14 @@ class UserPageState extends State<UserPage> {
   final Color accentColour = const Color.fromARGB(255, 149, 49, 109);
   final Color textColour = Colors.white;
   late final AccountProvider accProvider;
+  List<DreamPost> posts = [];
 
   @override
   void initState() {
     super.initState();
     accProvider = context.read<AccountProvider>();
+    posts = accProvider.posts;
+    posts.sort((a, b) => b.time.compareTo(a.time));
   }
 
   @override
@@ -65,9 +68,9 @@ class UserPageState extends State<UserPage> {
         crossAxisCount: 3,   // Number of tiles per row
         childAspectRatio: 1.0, // Aspect ratio for each tile
       ),
-      itemCount: accProvider.posts.length, // Number of posts to display
+      itemCount: posts.length, // Number of posts to display
       itemBuilder: (context, index) {
-        final post = accProvider.posts[index];
+        final post = posts[index];
         return _gridTile(post, index);  // Use the post's image URL or any other property
       },
     );
@@ -81,7 +84,7 @@ class UserPageState extends State<UserPage> {
           MaterialPageRoute(
             builder: (context) => ImageViewer(
               initialIndex: index,
-              posts: accProvider.posts, // Pass the full list of posts
+              posts: posts, // Pass the full list of posts
             ),
           ),
         );
@@ -133,7 +136,7 @@ class UserPageState extends State<UserPage> {
                             fontSize: 12, color: textColour),
                       ),
                       Text(
-                        '${accProvider.posts.length}',
+                        '${posts.length}',
                         style: TextStyle(
                             fontSize: 14, color: textColour, fontWeight: FontWeight.bold),
                       ),

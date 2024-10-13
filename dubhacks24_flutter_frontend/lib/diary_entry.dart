@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dubhacks24_flutter_frontend/account_provider.dart';
 import 'package:dubhacks24_flutter_frontend/post.dart';
-import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -25,7 +24,6 @@ class DiaryEntry extends StatefulWidget {
 // State for EntryView
 class _DiaryEntryState extends State<DiaryEntry>{
   final TextEditingController _textController = TextEditingController();
-  String currentText = ''; // Text field that we update.
   String imageUrl = '';
   String imageCaption = '';
   final Color backColour = const Color.fromARGB(255, 26, 2, 37);
@@ -39,7 +37,7 @@ class _DiaryEntryState extends State<DiaryEntry>{
   bool dataLoaded = false;
 
 
-  // Initialises state to have currentText be original entry text,
+  // Initialises state to have _textController.text be original entry text,
   // and the same for name.
   @override
   void initState() {
@@ -114,9 +112,9 @@ class _DiaryEntryState extends State<DiaryEntry>{
                             maxLength: 500,
                             maxLines: null,
                             decoration: const InputDecoration(border: InputBorder.none),
-                            onChanged: (text) => {currentText = text},
+                            onChanged: (text) => {_textController.text = text},
                             style: TextStyle(color: textColour),
-                            cursorColor: Colors.white
+                            cursorColor: Colors.white,
                           ),
                         ),
                       ),
@@ -131,12 +129,12 @@ class _DiaryEntryState extends State<DiaryEntry>{
                         children: [
                           GestureDetector(
                             onTap: () async {
-                              if (currentText.trim() != '') {
+                              if (_textController.text.trim() != '') {
                                 setState(() {
                                   loadLock = true;
                                   imageUrl = '';
                                 });
-                                await generateImage(currentText);
+                                await generateImage(_textController.text);
                                 setState(() => loadLock = false);
                               }
                             },                
@@ -152,13 +150,13 @@ class _DiaryEntryState extends State<DiaryEntry>{
                           imageUrl.isNotEmpty ? GestureDetector(
                             onTap: () async {
                               await _downloadImg(imageUrl);
-                              if (currentText.trim() != '' && imageData != '') {
+                              if (_textController.text.trim() != '' && imageData != '') {
                                 accProvider.addPost(DreamPost(
                                   username: accProvider.username, 
                                   imageLink: imageData,
                                   time: DateTime.now(), 
                                   profilePic: accProvider.pfp, 
-                                  caption: currentText)
+                                  caption: _textController.text)
                                 );
                                 Navigator.pop(context);
                               }
@@ -178,11 +176,11 @@ class _DiaryEntryState extends State<DiaryEntry>{
                       const SizedBox(height: 12),
                       GestureDetector(
                         onTap: () async {
-                          if (currentText.trim() != '') {
+                          if (_textController.text.trim() != '') {
                             setState(() {
                               perplexLock = true;
                             });
-                            String? newText = await _summarizePrompt(currentText);
+                            String? newText = await _summarizePrompt(_textController.text);
                             print('debug: $newText');
                             if (newText != null) {
                               setState(() => _textController.text = newText);
@@ -224,7 +222,7 @@ class _DiaryEntryState extends State<DiaryEntry>{
     const String baseUrl = "https://api.perplexity.ai";
     const String endpoint = "/chat/completions";
     
-    final String finalPrompt = "Summarize this paragraph into 1 sentence: $prompt";
+    final String finalPrompt = "Summarize under 500 characters: $prompt. Write from the perspective of a person posting about their own dream on social media.";
 
     final Map<String, dynamic> requestBody = {
       "model": "llama-3.1-sonar-small-128k-chat",
