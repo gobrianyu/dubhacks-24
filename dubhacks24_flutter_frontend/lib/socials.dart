@@ -66,14 +66,20 @@ class SocialsState extends State<Socials> {
       return post.username.toLowerCase().contains(query);
     }).toList();
 
-    return Expanded(
-      child: ListView.builder(
-        itemCount: filteredFeed.length,
-        itemBuilder: (context, index) {
-          return _post(filteredFeed[index]);
-        },
-      ),
-    );
+    return filteredFeed.isEmpty 
+      ? Expanded(
+        child: Center(
+          child: Text('Nothing to show.', style: TextStyle(fontSize: 16, color: textColour))
+        ),
+      )
+      : Expanded(
+        child: ListView.builder(
+          itemCount: filteredFeed.length,
+          itemBuilder: (context, index) {
+            return _post(filteredFeed[index]);
+          },
+        ),
+      );
   }
 
   Widget _post(DreamPost post) {
