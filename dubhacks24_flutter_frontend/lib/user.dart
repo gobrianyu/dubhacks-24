@@ -37,15 +37,17 @@ class UserPageState extends State<UserPage> {
 }
 
 Widget _gridTile(String imagePath) {
-  return Container(
-    decoration: BoxDecoration(
-      border: Border.all(
-        color: const Color.fromARGB(136, 230, 163, 255),
-        width: 0.3, // Border width around each tile
+  return GestureDetector(
+    child: Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: const Color.fromARGB(136, 230, 163, 255),
+          width: 0.3, // Border width around each tile
+        ),
       ),
-    ),
-    child: Center(
-      child: Image.asset(imagePath), // Use imagePath for flexibility
+      child: Center(
+        child: Image.asset(imagePath), // Use imagePath for flexibility
+      ),
     ),
   );
 }

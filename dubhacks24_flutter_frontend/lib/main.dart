@@ -33,7 +33,7 @@ class _MainAppState extends State<MainApp> {
           child: getChild(),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Color.fromARGB(255, 255, 225, 225),
+          backgroundColor: const Color.fromARGB(255, 255, 225, 225),
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.book),
@@ -60,10 +60,10 @@ class _MainAppState extends State<MainApp> {
 
   Widget getChild() {
     switch (_selectedIndex) {
-      case 2: return UserPage();
-      case 1: return Socials();
+      case 2: return const UserPage();
+      case 1: return const Socials();
       case 0: return Diary(account: AccountProvider.fromNew(username: 'username'));
-      default: return Placeholder();
+      default: return const Placeholder();
     }
   }
 }

@@ -27,7 +27,7 @@ class DiaryState extends State<Diary> {
   Widget build(BuildContext context) {
     final DateTime now = DateTime.now();
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
@@ -50,11 +50,20 @@ class DiaryState extends State<Diary> {
                   MaterialPageRoute(builder: (context) => DiaryEntry()),
                 );
               },
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.blue
-                ),
+              child: Row(
+                children: [
+                  Spacer(),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    height: 80,
+                    width: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.blue
+                    ),
+                    child: Icon(Icons.draw, color: Colors.white, size: 40)
+                  ),
+                ],
               ),
             )
             : Container()

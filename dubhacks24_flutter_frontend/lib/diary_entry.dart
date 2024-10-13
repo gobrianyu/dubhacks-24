@@ -64,16 +64,16 @@ class _DiaryEntryState extends State<DiaryEntry>{
           alignment: Alignment.bottomRight,
           children: [
             Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: TextFormField(
-                    autofocus: true,
-                    initialValue: currentText,
-                    expands: true,
-                    maxLines: null,
-                    decoration: const InputDecoration(border: InputBorder.none),
-                    onChanged: (text) => {currentText = text},
-                  ),
-                ),
+              padding: const EdgeInsets.all(15),
+              child: TextFormField(
+                autofocus: true,
+                initialValue: currentText,
+                expands: true,
+                maxLines: null,
+                decoration: const InputDecoration(border: InputBorder.none),
+                onChanged: (text) => {currentText = text},
+              ),
+            ),
             IconButton(
               icon: Icon(Icons.pending),
               onPressed: () {
