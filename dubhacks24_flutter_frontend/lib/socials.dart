@@ -57,7 +57,7 @@ class SocialsState extends State<Socials> {
   }
 
   Widget _postList() {
-    // Filter posts based on the search query
+  // Filter posts based on the search query
     final query = searchController.text.toLowerCase();
     final filteredFeed = feed.where((post) {
       if (query.startsWith('#')) {
@@ -68,18 +68,27 @@ class SocialsState extends State<Socials> {
 
     return filteredFeed.isEmpty 
       ? Expanded(
-        child: Center(
-          child: Text('Nothing to show.', style: TextStyle(fontSize: 16, color: textColour))
-        ),
-      )
+          child: Center(
+            child: Text('Nothing to show.', style: TextStyle(fontSize: 16, color: textColour)),
+          ),
+        )
       : Expanded(
-        child: ListView.builder(
-          itemCount: filteredFeed.length,
-          itemBuilder: (context, index) {
-            return _post(filteredFeed[index]);
-          },
-        ),
-      );
+          child: ListView.builder(
+            itemCount: filteredFeed.length + 1, // Increase count by 1 for the end message
+            itemBuilder: (context, index) {
+              if (index < filteredFeed.length) {
+                return _post(filteredFeed[index]);
+              } else {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Text("You've reached the end.", style: TextStyle(fontSize: 13, color: textColour, fontWeight: FontWeight.w300)),
+                  ),
+                );
+              }
+            },
+          ),
+        );
   }
 
   Widget _post(DreamPost post) {

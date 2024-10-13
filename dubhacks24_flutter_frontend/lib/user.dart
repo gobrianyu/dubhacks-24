@@ -196,7 +196,17 @@ class ImageViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white), // Custom back button icon
+          onPressed: () {
+            Navigator.pop(context); // Manually control the back navigation
+          },
+        ),
+      ),
       body: PageView.builder(
         scrollDirection: Axis.vertical,
         controller: PageController(initialPage: initialIndex),
