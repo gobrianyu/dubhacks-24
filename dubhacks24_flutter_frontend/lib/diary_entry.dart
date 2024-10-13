@@ -19,6 +19,7 @@ class DiaryEntry extends StatefulWidget {
 class _DiaryEntryState extends State<DiaryEntry>{
   String currentText = ''; // Text field that we update.
   String imageUrl = '';
+  String imageCaption = '';
   final Color backColour = Color.fromARGB(255, 26, 2, 37);
   final Color accentColour = Color.fromARGB(255, 149, 49, 109);
   final Color textColour = Colors.white;
@@ -134,6 +135,38 @@ class _DiaryEntryState extends State<DiaryEntry>{
       });
     } else {
       print('Error: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<void> generateCaption(String prompt) async {
+    const String apiKey = String.fromEnvironment('OPENAI_API_KEY');
+    const String apiUrl = 'https://api.openai.com/v1/chat/completions';
+
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $apiKey',
+      },
+      body: jsonEncode({
+        'model': "gpt-4",
+        'messages': [
+          {'role': "system", 'content': "You are a helpful assistant."},
+          {
+            'role': "user",
+            'content': "Create a 1 sentence caption of this description of a dream: $prompt",
+          },
+        ],
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      setState(() {
+        imageCaption = '${responseData['choices'][0]['message']['content']}';
+      });
+    } else {
+      throw Exception('Failed to generate caption: ${response.statusCode} ${response.body}');
     }
   }
 }
