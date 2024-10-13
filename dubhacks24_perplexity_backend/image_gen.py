@@ -13,20 +13,22 @@ response = ''
 # returns an image url that the Flutter side can use to download and show the image to the user
 def handle_prompt_image():
     global response
-    if (request.method == 'POST'):
-        client = OpenAI()
+    client = OpenAI()
 
-        request_data = request.data
-        request_data = json.loads(request_data.decode('utf-8'))
-        prompt = request_data['prompt']
-        final_prompt = "Create an image in a photo-realistic format from the perspective of someone dreaming this dream:" + prompt + ". Make sure to be as loyal to the source dream as possible."
+    request_data = request.get_json()
+    
+    prompt = request_data.get('prompt', '')
+    final_prompt = "Create an image in a photo-realistic format from the perspective of someone dreaming this dream:" + prompt + ". Make sure to be as loyal to the source dream as possible."
 
-        response = client.images.generate(
-            model="dall-e-3",
-            prompt=final_prompt,
-            size="1024x1024",
-            quality="standard",
-            n=1,
-        )
-        image_url = response.data[0].url
-        return (image_url)
+    response = client.images.generate(
+        model="dall-e-3",
+        prompt=final_prompt,
+        size="1024x1024",
+        quality="standard",
+        n=1
+    )
+    image_url = response.data[0].url
+    return jsonify({'image': image_url})
+    
+if (__name__ == "__main__"):
+    app.run(debug=True)
