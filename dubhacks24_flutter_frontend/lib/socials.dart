@@ -57,11 +57,20 @@ class SocialsState extends State<Socials> {
   }
 
   Widget _postList() {
+    // Filter posts based on the search query
+    final query = searchController.text.toLowerCase();
+    final filteredFeed = feed.where((post) {
+      if (query.startsWith('#')) {
+        return post.caption.toLowerCase().contains(query);
+      }
+      return post.username.toLowerCase().contains(query);
+    }).toList();
+
     return Expanded(
       child: ListView.builder(
-        itemCount: feed.length,
+        itemCount: filteredFeed.length,
         itemBuilder: (context, index) {
-          return _post(feed[index]);
+          return _post(filteredFeed[index]);
         },
       ),
     );
@@ -84,7 +93,7 @@ class SocialsState extends State<Socials> {
               child: ClipOval(
                 child: Image.asset(
                   post.profilePic, // Load the profile picture from assets
-                  fit: BoxFit.cover, // Ensure the image covers the circle without distortion
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -131,13 +140,14 @@ class SocialsState extends State<Socials> {
       child: Row(
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width - 44, // WARNING: NON GLOBAL CONSTANT
+            width: MediaQuery.of(context).size.width - 44,
             child: TextField(  
               controller: searchController,
               cursorColor: textColour,
               cursorWidth: 1,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
+                color: textColour
               ),
               decoration: InputDecoration(
                 hintText: 'Search...',
@@ -155,7 +165,7 @@ class SocialsState extends State<Socials> {
                   onTap: () {
                     setState(() => searchController.clear());
                   },
-                  child: Icon(Icons.clear, size: 18, color: textColour)
+                  child: Icon(Icons.clear, size: 18, color: textColour),
                 )
               ),
             ),
