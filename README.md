@@ -25,9 +25,9 @@ Two options are available:
 #### 2. Source Code
 - Download/clone this repository and locally open the project in an editor/environment.
 - Ensure that [Flutter is installed](https://docs.flutter.dev/get-started/install/windows/mobile).
-- Navigate to the project root in your terminal.
+- Navigate to the `dubhacks24_flutter_frontend` folder in your terminal.
 - Run `flutter pub get`.
-- Run `flutter build windows --release`. The resulting .exe should appear under `...\build\windows\x64\runner\Release` and should be runnable.
+- Run `flutter build apk --release`. The resulting .apk should appear under `...\build\app\outputs\bundle\Release\` and should be runnable.
 
 Please note that this app will not function without working API keys. These are not provided.
 Feel free to contact if any issues occur.
